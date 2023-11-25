@@ -14,10 +14,8 @@ export class UploadsService {
   }
 
   async uploadFile(file) {
-    console.log(file);
     const { originalname } = file;
     const bucket = this.configService.get<string>('AWS_S3_BUCKET');
-    console.log(bucket);
     return await this.s3_upload(
       file.buffer,
       bucket,

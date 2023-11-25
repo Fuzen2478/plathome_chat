@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNumber, IsString } from 'class-validator';
 import { MessageType } from 'src/schemas/chat.schema';
-
+import { Types } from 'mongoose';
 export class CreateChatDto {
   @ApiProperty({
     description: '채팅 내용',
@@ -29,5 +29,5 @@ export class CreateChatDto {
     example: '655619f9f92ef0ab82b48a8b',
   })
   @IsNumber()
-  room_id: string;
+  room_id: string | Types.ObjectId;
 }

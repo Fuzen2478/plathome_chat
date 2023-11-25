@@ -20,21 +20,21 @@ export class ChatRoomService {
     private readonly chatService: ChatService,
   ) {}
 
-  // async getMyChatRooms(userId: number): Promise<ChatRoomResponseDto[]> {
-  //   const chatRooms = await this.roomRepository.findRoomByUserId(userId);
-  //   const chatRoomDtos: ChatRoomResponseDto[] = [];
+  async getMyChatRooms(userId: number): Promise<ChatRoomResponseDto[]> {
+    const chatRooms = await this.roomRepository.findRoomByUserId(userId);
+    const chatRoomDtos: ChatRoomResponseDto[] = [];
 
-  //   for (const chatRoom of chatRooms) {
-  //     const last_chat = await this.chatService.getLastChatById(chatRoom._id);
+    for (const chatRoom of chatRooms) {
+      const last_chat = await this.chatService.getLastChatById(chatRoom._id);
 
-  //     chatRoomDtos.push({
-  //       ...chatRoom,
-  //       last_chat,
-  //     });
-  //   }
+      chatRoomDtos.push({
+        ...chatRoom,
+        last_chat,
+      });
+    }
 
-  //   return chatRoomDtos;
-  // }
+    return chatRoomDtos;
+  }
 
   async createChatRoom(
     dto: CreateChatRoomDto,

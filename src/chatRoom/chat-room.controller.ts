@@ -23,12 +23,12 @@ export class ChatRoomController {
     return await this.chatRoomService.createChatRoom(dto, userId);
   }
 
-  // @ApiOperation({ summary: '나의 채팅방 조회' })
-  // // @ApiResponse({})
-  // // @ApiBearerAuth()
-  // @UseGuards(JwtAuthGuard)
-  // @Get('me/chatrooms')
-  // async getMyChatRooms(@CurrentUser() user: UserEntity) {
-  //   return await this.chatRoomService.getMyChatRooms(user.id);
-  // }
+  @ApiOperation({ summary: '나의 채팅방 조회' })
+  // @ApiResponse({})
+  // @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('me/chatrooms')
+  async getMyChatRooms(@CurrentUser() user: UserEntity) {
+    return await this.chatRoomService.getMyChatRooms(user.id);
+  }
 }

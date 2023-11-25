@@ -11,17 +11,17 @@ import { ChatRoomDto } from './dtos/chat-room.dto';
 export class ChatRoomController {
   constructor(private readonly chatRoomService: ChatRoomService) {}
 
-  // @ApiOperation({ summary: '1대1 대화요청하여 채팅방 생성' })
-  // // @ApiBearerAuth()
-  // // @UseGuards(JwtAuthGuard)
-  // @Post('chatroom')
-  // async createChatRoom(
-  //   @CurrentUser() user: UserEntity,
-  //   @Body() dto: CreateChatRoomDto,
-  // ): Promise<ChatRoomDto> {
-  //   const userId = user ? user.id : 1;
-  //   return await this.chatRoomService.createChatRoom(dto, userId);
-  // }
+  @ApiOperation({ summary: '1대1 대화요청하여 채팅방 생성' })
+  // @ApiBearerAuth()
+  // @UseGuards(JwtAuthGuard)
+  @Post('chatroom')
+  async createChatRoom(
+    @CurrentUser() user: UserEntity,
+    @Body() dto: CreateChatRoomDto,
+  ): Promise<ChatRoomDto> {
+    const userId = 1;
+    return await this.chatRoomService.createChatRoom(dto, userId);
+  }
 
   // @ApiOperation({ summary: '나의 채팅방 조회' })
   // // @ApiResponse({})

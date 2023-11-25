@@ -35,27 +35,27 @@ export class ChatRoomService {
   //   return chatRoomDtos;
   // }
 
-  // async createChatRoom(
-  //   dto: CreateChatRoomDto,
-  //   userId?: number,
-  // ): Promise<ChatRoomDto> {
-  //   const chatRoom = await this.roomRepository.createChatRoom(dto, userId);
+  async createChatRoom(
+    dto: CreateChatRoomDto,
+    userId: number,
+  ): Promise<ChatRoomDto> {
+    const chatRoom = await this.roomRepository.createChatRoom(dto, userId);
 
-  //   return chatRoom;
-  // }
+    return chatRoom;
+  }
 
-  // async exitChatRoom(userId: number, roomId: Types.ObjectId) {
-  //   const room: ChatRoom | null =
-  //     await this.roomRepository.findRoomById(roomId);
+  async exitChatRoom(userId: number, roomId: Types.ObjectId) {
+    const room: ChatRoom | null =
+      await this.roomRepository.findRoomById(roomId);
 
-  //   if (!room) {
-  //     throw new NotFoundException('찾을 수 없는 채팅방입니다');
-  //   }
+    if (!room) {
+      throw new NotFoundException('찾을 수 없는 채팅방입니다');
+    }
 
-  //   if (room.buyer_id !== userId && room.seller_id !== userId) {
-  //     throw new BadRequestException('이미 나간 채팅방입니다.');
-  //   }
+    if (room.buyer_id !== userId && room.seller_id !== userId) {
+      throw new BadRequestException('이미 나간 채팅방입니다.');
+    }
 
-  //   await this.roomRepository.updateChatRoom(room);
-  // }
+    await this.roomRepository.updateChatRoom(room);
+  }
 }

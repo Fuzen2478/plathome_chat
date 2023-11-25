@@ -1,4 +1,3 @@
-import { Decimal128 } from 'mongoose';
 import { MessageType } from 'src/schemas/chat.schema';
 
 export type Message = {
@@ -9,12 +8,13 @@ export type Message = {
   roomId: string;
 };
 
-export type EnterChatRoomType = {
-  nickname: string;
-  roomId: string;
+export type SendMessageType = {
   userId: number;
+  roomId: string;
+  nickname: string;
+  message: string;
 };
 
-
-
-
+export type EnterChatRoomType = {
+  roomId: string;
+};

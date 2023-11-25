@@ -10,9 +10,8 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
-import { EnterChatRoomType, Message } from './types/chat-type';
+import { EnterChatRoomType, SendMessageType } from './types/chat-type';
 import { ChatRoomService } from 'src/chatRoom/chat-room.service';
-import { Types } from 'mongoose';
 import { MessageType } from 'src/schemas/chat.schema';
 
 @WebSocketGateway({
@@ -30,12 +29,12 @@ export class ChatGateway
     private readonly roomService: ChatRoomService,
   ) {}
 
-  handleConnection(client: Socket) {
+  handleConnection(@ConnectedSocket() client: Socket) {
     // Handle new WebSocket connection
-    console.log(`${Date.now()},Client connected: ${client.id}`);
+    console.log(`${new Date()},Client connected: ${client.id}`);
   }
 
-  handleDisconnect(client: Socket) {
+  handleDisconnect(@ConnectedSocket() @ConnectedSocket() client: Socket) {
     // Handle WebSocket disconnection
     console.log(`Client disconnected: ${client.id}`);
   }
@@ -46,25 +45,37 @@ export class ChatGateway
 
   @SubscribeMessage('enterChatRoom')
   enterChatRoom(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() @ConnectedSocket() client: Socket,
     @MessageBody() payload: EnterChatRoomType,
   ): void {
-    const { nickname, roomId } = payload;
-    console.log(payload);
-    const message = `${nickname}님이 방에 입장하였습니다.`;
+    const { roomId } = payload;
     client.join(roomId);
-    this.server.to(`${roomId}`).emit('adminMessage', {
-      sender: client.id,
-      message,
-    });
+    console.log(`${new Date()} ${roomId}에 누군가 입장하였습니다.`);
   }
 
   @SubscribeMessage('sendMessage')
-  handleMessage(client: Socket, @MessageBody() message: string): void {}
+  handleMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: SendMessageType,
+  ): void {
+    const { roomId, message, userId, nickname } = payload;
+
+    this.chatService.createChat({
+      content: message,
+      type: MessageType.TEXT,
+      user_id: userId,
+      room_id: roomId,
+    });
+    this.server.to(`${roomId}`).emit('message', {
+      sender: client.id,
+      message,
+      nickname,
+    });
+  }
 
   @SubscribeMessage('exitChatRoom')
   async exitChatRoom(
-    client: Socket,
+    @ConnectedSocket() client: Socket,
     payload: EnterChatRoomType,
   ): Promise<void> {
     try {

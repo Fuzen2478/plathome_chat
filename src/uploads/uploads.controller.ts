@@ -5,15 +5,15 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadsService } from './uploads.service';
 
-@Controller('file')
+@Controller()
 export class UploadsController {
-  @Post('/upload')
+  constructor(private readonly uploadsService: UploadsService) {}
+
+  @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
-  uploadFile(
-    @UploadedFile()
-    file: Express.Multer.File,
-  ) {
-    return file.buffer.toString();
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return this.uploadsService.uploadFile(file);
   }
 }

@@ -9,6 +9,7 @@ import { ChatClientModule } from './chat/chatClient/chat-client.module';
 import { ChatRoomModule } from './chatRoom/chat-room.module';
 import jwtConfig from './config/jwt.config';
 import { UserModule } from './user/user.module';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
@@ -34,7 +35,7 @@ import { UserModule } from './user/user.module';
       }),
       inject: [ConfigService],
     }),
-    // UploadsModule,
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],

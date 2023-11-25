@@ -8,9 +8,7 @@ export enum MessageType {
   TEXT = 'text',
 }
 
-@Schema({
-  timestamps: true,
-})
+@Schema({})
 export class Chat {
   _id: Types.ObjectId;
 

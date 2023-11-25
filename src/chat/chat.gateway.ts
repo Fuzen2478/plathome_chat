@@ -91,7 +91,8 @@ export class ChatGateway
       user_id: userId,
       room_id: roomId,
     });
-    this.server.to(`${roomId}`).emit('message', {
+
+    this.server.to(`${roomId}`).emit('image', {
       sender: client.id,
       message,
       nickname,

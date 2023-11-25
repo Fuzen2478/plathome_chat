@@ -75,6 +75,7 @@ export class ChatGateway
       sender: client.id,
       message,
       nickname,
+      type: MessageType.TEXT,
     });
   }
 
@@ -92,10 +93,11 @@ export class ChatGateway
       room_id: roomId,
     });
 
-    this.server.to(`${roomId}`).emit('image', {
+    this.server.to(`${roomId}`).emit('message', {
       sender: client.id,
       message,
       nickname,
+      type: MessageType.IMAGE,
     });
   }
 

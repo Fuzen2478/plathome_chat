@@ -6,6 +6,8 @@ import { ChatRoomService } from './chat-room.service';
 import { CreateChatRoomDto } from './dtos/create-chat-room.dto';
 import { UserEntity } from '../user/entities/user.entity';
 import { ChatRoomDto } from './dtos/chat-room.dto';
+import { ChatRoomResponseDto } from './dtos/res/chat-room-response.dto';
+import { ChatRoom } from 'src/schemas/chat-room.schema';
 
 @Controller()
 export class ChatRoomController {
@@ -14,6 +16,9 @@ export class ChatRoomController {
   @ApiOperation({ summary: '1대1 대화요청하여 채팅방 생성' })
   // @ApiBearerAuth()
   // @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    type: ChatRoom,
+  })
   @Post('chatroom')
   async createChatRoom(
     @CurrentUser() user: UserEntity,
@@ -24,7 +29,9 @@ export class ChatRoomController {
   }
 
   @ApiOperation({ summary: '나의 채팅방 조회' })
-  // @ApiResponse({})
+  @ApiResponse({
+    type: [ChatRoomResponseDto],
+  })
   // @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Get('me/chatrooms')

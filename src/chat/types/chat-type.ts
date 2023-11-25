@@ -1,5 +1,10 @@
 import { MessageType } from 'src/schemas/chat.schema';
 
+export enum UserType {
+  SELLER = 'seller',
+  BUYER = 'buyer',
+}
+
 export type Message = {
   userId: number;
   nickname: string;
@@ -8,7 +13,7 @@ export type Message = {
   roomId: string;
 };
 
-export type SendMessageType = {
+export type SendDataType = {
   userId: number;
   roomId: string;
   nickname: string;
@@ -17,4 +22,11 @@ export type SendMessageType = {
 
 export type EnterChatRoomType = {
   roomId: string;
+};
+
+export type ExitChatRoomType = {
+  roomId: string;
+  userId: number;
+  nickname: string;
+  userType: UserType;
 };

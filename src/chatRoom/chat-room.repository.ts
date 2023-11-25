@@ -26,6 +26,12 @@ export class ChatRoomRepository {
   }
 
   async updateChatRoom(room: ChatRoom) {
-    return await this.roomModel.updateOne({ _id: room._id }, room);
+    return await this.roomModel.findOneAndUpdate({ _id: room._id }, room, {
+      returnNewDocument: true,
+    });
+  }
+
+  async deleteRoom(room_id: Types.ObjectId) {
+    return await this.roomModel.findOneAndDelete({ _id: room_id });
   }
 }

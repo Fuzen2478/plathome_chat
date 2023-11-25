@@ -11,6 +11,7 @@ import { ChatService } from 'src/chat/chat.service';
 import { ChatRoomResponseDto } from './dtos/res/chat-room-response.dto';
 import { ChatRoomRepository } from './chat-room.repository';
 import { ChatRoomDto } from './dtos/chat-room.dto';
+import { UserType } from 'src/chat/types/chat-type';
 
 @Injectable()
 export class ChatRoomService {
@@ -44,7 +45,11 @@ export class ChatRoomService {
     return chatRoom;
   }
 
-  async exitChatRoom(userId: number, roomId: Types.ObjectId) {
+  async exitChatRoom(
+    userId: number,
+    roomId: Types.ObjectId,
+    userType: UserType,
+  ) {
     const room: ChatRoom | null =
       await this.roomRepository.findRoomById(roomId);
 
@@ -56,6 +61,19 @@ export class ChatRoomService {
       throw new BadRequestException('이미 나간 채팅방입니다.');
     }
 
-    await this.roomRepository.updateChatRoom(room);
+    if (userType === UserType.BUYER && userId === room.buyer_id) {
+      delete room.buyer_id;
+    }
+
+    if (userType === UserType.SELLER && userId === room.seller_id) {
+      delete room.seller_id;
+    }
+
+    const updatedRoom = await this.roomRepository.updateChatRoom(room);
+
+    if (!updatedRoom.buyer_id && !updatedRoom.seller_id) {
+      await this.roomRepository.deleteRoom(updatedRoom._id);
+    }
+    return updatedRoom;
   }
 }

@@ -10,9 +10,14 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ChatService } from './chat.service';
-import { EnterChatRoomType, SendMessageType } from './types/chat-type';
+import {
+  EnterChatRoomType,
+  ExitChatRoomType,
+  SendDataType,
+} from './types/chat-type';
 import { ChatRoomService } from 'src/chatRoom/chat-room.service';
 import { MessageType } from 'src/schemas/chat.schema';
+import { Types } from 'mongoose';
 
 @WebSocketGateway({
   cors: {
@@ -56,7 +61,7 @@ export class ChatGateway
   @SubscribeMessage('sendMessage')
   handleMessage(
     @ConnectedSocket() client: Socket,
-    @MessageBody() payload: SendMessageType,
+    @MessageBody() payload: SendDataType,
   ): void {
     const { roomId, message, userId, nickname } = payload;
 
@@ -73,18 +78,44 @@ export class ChatGateway
     });
   }
 
+  @SubscribeMessage('sendImage')
+  handleImage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: SendDataType,
+  ): void {
+    const { roomId, message, userId, nickname } = payload;
+
+    this.chatService.createChat({
+      content: message,
+      type: MessageType.IMAGE,
+      user_id: userId,
+      room_id: roomId,
+    });
+    this.server.to(`${roomId}`).emit('message', {
+      sender: client.id,
+      message,
+      nickname,
+    });
+  }
+
   @SubscribeMessage('exitChatRoom')
   async exitChatRoom(
     @ConnectedSocket() client: Socket,
-    payload: EnterChatRoomType,
+    payload: ExitChatRoomType,
   ): Promise<void> {
     try {
-      const { nickname, roomId, userId } = payload;
+      const { nickname, roomId, userId, userType } = payload;
 
       const message = `${nickname}님이 방에서 나갔습니다.`;
 
-      // await this.roomService.exitChatRoom(userId, new Types.ObjectId(roomId));
+      await this.roomService.exitChatRoom(
+        userId,
+        new Types.ObjectId(roomId),
+        userType,
+      );
+
       client.leave(`${roomId}`);
+
       this.server.to(`${roomId}`).emit('message', {
         sender: client.id,
         message,

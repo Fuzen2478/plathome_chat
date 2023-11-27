@@ -21,8 +21,8 @@ export class UserService {
   async findUserById(userId: number) {
     const baseUrl = this.configService.get<string>('API_SERVER_URL');
     const url = `${baseUrl}/api/member/no-auth/${userId}`;
-    const { data } = await firstValueFrom(this.httpService.get(url));
 
+    const { data } = await firstValueFrom(this.httpService.get(url));
     return data;
   }
 }

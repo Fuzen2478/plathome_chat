@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/user/strategies/jwt.strategy';
 import { CurrentUser } from 'src/common/decorators/current-user.decorator';
 import { ChatRoomService } from './chat-room.service';
@@ -33,7 +38,11 @@ export class ChatRoomController {
   @ApiResponse({
     type: [ChatRoomResponseDto],
   })
-  @ApiBearerAuth()
+  @ApiHeader({
+    name: 'x-access-token',
+    description: 'JWT token',
+    required: true,
+  })
   @UseGuards(JwtAuthGuard)
   @Get('me/chatrooms')
   async getMyChatRooms(@CurrentUser() user: UserEntity) {

@@ -10,7 +10,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../user.service';
 
 interface JwtPayload {
-  member_id: number;
+  sub: string;
 }
 
 //TODO: X-ACCESS-TOKEN
@@ -24,6 +24,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
     status: any,
   ) {
+    console.log(info);
     if (info && info.message === 'jwt expired') {
       throw new HttpException('토큰이 만료되었습니다.', 401);
     }
@@ -39,9 +40,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly userService: UserService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromHeader('X-Access-Token'),
+      jwtFromRequest: (req) => {
+        const accessToken =
+          req.headers['x-access-token'] || req.headers['authorization'];
+        if (accessToken && accessToken.startsWith('Bearer ')) {
+          return accessToken.slice(7);
+        }
+        return accessToken;
+      },
       ignoreExpiration: false,
-      secretOrKey: configService.get<string>('jwt.JWT_SECRET'),
+      secretOrKey: Buffer.from(
+        configService.get<string>('jwt.JWT_SECRET'),
+        'base64',
+      ),
       signOptions: {
         expiresIn: configService.get<string | number>('jwt.JWT_EXPIRES_IN'),
       },
@@ -49,7 +60,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: JwtPayload) {
-    const id = payload.member_id;
+    const id = Number(payload.sub);
     const user = await this.userService.findUserById(id);
 
     if (!user) {

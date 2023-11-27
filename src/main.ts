@@ -52,7 +52,6 @@ async function bootstrap() {
     .setDescription('소프트웨어 공학 PlatHome 채팅 서버 Swagger입니다.')
     .setVersion('1.0.0')
     .addTag('swagger')
-    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

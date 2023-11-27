@@ -10,7 +10,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../user.service';
 
 interface JwtPayload {
-  id: number;
+  member_id: number;
 }
 
 //TODO: X-ACCESS-TOKEN
@@ -49,7 +49,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   }
 
   async validate(payload: JwtPayload) {
-    const id = payload.id;
+    const id = payload.member_id;
     const user = await this.userService.findUserById(id);
 
     if (!user) {

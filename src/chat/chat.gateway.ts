@@ -70,13 +70,19 @@ export class ChatGateway
       type: MessageType.TEXT,
       user_id: userId,
       room_id: roomId,
-    });
-    this.server.to(`${roomId}`).emit('message', {
-      sender: client.id,
-      message,
       nickname,
-      type: MessageType.TEXT,
     });
+    this.server
+      .to(
+        `$
+    {roomId}`,
+      )
+      .emit('message', {
+        sender: client.id,
+        message,
+        nickname,
+        type: MessageType.TEXT,
+      });
   }
 
   @SubscribeMessage('sendImage')
@@ -91,6 +97,7 @@ export class ChatGateway
       type: MessageType.IMAGE,
       user_id: userId,
       room_id: roomId,
+      nickname,
     });
 
     this.server.to(`${roomId}`).emit('message', {

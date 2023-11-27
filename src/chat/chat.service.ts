@@ -17,4 +17,8 @@ export class ChatService {
       new Types.ObjectId(roomId),
     );
   }
+
+  async findChatsInRoom(roomId: Types.ObjectId) {
+    return await this.chatRepository.findChatsByRoomId(roomId);
+  }
 }

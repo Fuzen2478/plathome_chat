@@ -26,6 +26,11 @@ export class Chat {
   @Prop({
     required: true,
   })
+  nickname: string;
+
+  @Prop({
+    required: true,
+  })
   content: string;
 
   @Prop({

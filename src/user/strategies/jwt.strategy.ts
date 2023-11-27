@@ -13,6 +13,8 @@ interface JwtPayload {
   id: number;
 }
 
+//TODO: X-ACCESS-TOKEN
+
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(
@@ -37,7 +39,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     private readonly userService: UserService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromHeader('X-Access-Token'),
       ignoreExpiration: false,
       secretOrKey: configService.get<string>('jwt.JWT_SECRET'),
       signOptions: {

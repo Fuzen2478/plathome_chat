@@ -25,6 +25,16 @@ export class ChatRoom {
   @Prop({
     required: true,
   })
+  seller_nickname: string;
+
+  @Prop({
+    required: true,
+  })
+  buyer_nickname: string;
+
+  @Prop({
+    required: true,
+  })
   estate_id: number;
 
   @Prop({ default: Date.now })

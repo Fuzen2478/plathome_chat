@@ -1,9 +1,9 @@
 export class UserEntity {
-  id: number;
+  member_id: number;
   nickname: string | null;
   provider: string;
   providerId: string;
   profileImageId: number | null;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  modified_at: Date;
 }

@@ -19,6 +19,10 @@ export class ChatRoomService {
     private readonly roomRepository: ChatRoomRepository,
     private readonly chatService: ChatService,
   ) {}
+  async getMyChatRoomDetails(roomId: Types.ObjectId) {
+    const chats = await this.chatService.findChatsInRoom(roomId);
+    return chats;
+  }
 
   async getMyChatRooms(userId: number): Promise<ChatRoomResponseDto[]> {
     const chatRooms = await this.roomRepository.findRoomByUserId(userId);

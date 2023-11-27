@@ -28,6 +28,18 @@ export class ChatRoomDto {
   seller_id: number;
 
   @ApiProperty({
+    description: '구매자 닉네임',
+  })
+  @Expose()
+  buyer_nickname: string;
+
+  @ApiProperty({
+    description: '판매자 닉네임',
+  })
+  @Expose()
+  seller_nickname: string;
+
+  @ApiProperty({
     description: '생성일자 ',
   })
   @Expose()

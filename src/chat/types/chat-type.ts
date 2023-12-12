@@ -22,6 +22,7 @@ export type SendDataType = {
 
 export type EnterChatRoomType = {
   roomId: string;
+  userId: number;
 };
 
 export type ExitChatRoomType = {

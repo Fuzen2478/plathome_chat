@@ -25,7 +25,6 @@ export class UploadsService {
   }
 
   async s3_upload(file, bucket, name, mimetype) {
-    console.log('asdasd');
     const params = {
       Bucket: bucket,
       Key: `chat/${new Date()}_${String(name)}`,

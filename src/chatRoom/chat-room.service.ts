@@ -67,10 +67,12 @@ export class ChatRoomService {
 
     if (userType === UserType.BUYER && userId === room.buyer_id) {
       delete room.buyer_id;
+      delete room.buyer_nickname;
     }
 
     if (userType === UserType.SELLER && userId === room.seller_id) {
       delete room.seller_id;
+      delete room.seller_nickname;
     }
 
     const updatedRoom = await this.roomRepository.updateChatRoom(room);
@@ -79,5 +81,9 @@ export class ChatRoomService {
       await this.roomRepository.deleteRoom(updatedRoom._id);
     }
     return updatedRoom;
+  }
+
+  async fetchRoomById(roomId: Types.ObjectId) {
+    return await this.roomRepository.findRoomById(roomId);
   }
 }

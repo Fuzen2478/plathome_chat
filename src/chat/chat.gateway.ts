@@ -18,12 +18,19 @@ import {
 import { ChatRoomService } from 'src/chatRoom/chat-room.service';
 import { MessageType } from 'src/schemas/chat.schema';
 import { Types } from 'mongoose';
+import { InjectQueue, Processor } from '@nestjs/bull';
+import { Queue } from 'bull';
+import { UseFilters } from '@nestjs/common';
+import { WebsocketExceptionsFilter } from 'src/common/filiters/socket.exception';
+import { WsException } from '@nestjs/websockets';
 
+@Processor('chat')
 @WebSocketGateway({
   cors: {
     origin: '*',
   },
 })
+@UseFilters(WebsocketExceptionsFilter)
 export class ChatGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
@@ -32,6 +39,7 @@ export class ChatGateway
   constructor(
     private readonly chatService: ChatService,
     private readonly roomService: ChatRoomService,
+    @InjectQueue('chat') private readonly chatQueue: Queue,
   ) {}
 
   handleConnection(@ConnectedSocket() client: Socket) {
@@ -49,13 +57,24 @@ export class ChatGateway
   }
 
   @SubscribeMessage('enterChatRoom')
-  enterChatRoom(
+  async enterChatRoom(
     @ConnectedSocket() @ConnectedSocket() client: Socket,
     @MessageBody() payload: EnterChatRoomType,
-  ): void {
-    const { roomId } = payload;
+  ): Promise<void> {
+    const { roomId, userId } = payload;
+    const room = await this.roomService.fetchRoomById(
+      new Types.ObjectId(roomId),
+    );
+
+    if (!room) {
+      throw new WsException('방을 찾을 수 없습니다.');
+    }
+
+    if (room.buyer_id !== userId && room.seller_id !== userId) {
+      throw new WsException('방에 입장할 권한이 없습니다. ');
+    }
+
     client.join(roomId);
-    console.log(`${new Date()} ${roomId}에 누군가 입장하였습니다.`);
   }
 
   @SubscribeMessage('sendMessage')
@@ -65,13 +84,20 @@ export class ChatGateway
   ): void {
     const { roomId, message, userId, nickname } = payload;
 
-    this.chatService.createChat({
-      content: message,
-      type: MessageType.TEXT,
-      user_id: userId,
-      room_id: roomId,
-      nickname,
-    });
+    this.chatQueue.add(
+      'save-chat',
+      {
+        userId,
+        nickname,
+        roomId,
+        content: message,
+        createdAt: new Date(),
+        type: MessageType.TEXT,
+      },
+      {
+        removeOnComplete: true,
+      },
+    );
 
     this.server.to(`${roomId}`).emit('message', {
       sender: client.id,
@@ -88,15 +114,20 @@ export class ChatGateway
     @MessageBody() payload: SendDataType,
   ): void {
     const { roomId, message, userId, nickname } = payload;
-
-    this.chatService.createChat({
-      content: message,
-      type: MessageType.IMAGE,
-      user_id: userId,
-      room_id: roomId,
-      nickname,
-    });
-
+    this.chatQueue.add(
+      'save-chat',
+      {
+        userId,
+        nickname,
+        roomId,
+        content: message,
+        createdAt: new Date(),
+        type: MessageType.IMAGE,
+      },
+      {
+        removeOnComplete: true,
+      },
+    );
     this.server.to(`${roomId}`).emit('message', {
       sender: client.id,
       userId: userId,

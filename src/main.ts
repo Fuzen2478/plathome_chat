@@ -3,11 +3,12 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import * as expressBasicAuth from 'express-basic-auth';
-import { SocketIoAdapter } from './chat/adapters/socket-io.adapters';
+
 import { UnhandledExceptionFilter } from './common/filiters/unhandled-exception.filter';
 import { HttpExceptionFilter } from './common/filiters/http-exception.filter';
 import { ValidationHttpError } from './common/errors/validation-http-error';
 import { ValidationPipe } from '@nestjs/common';
+import { RedisIoAdapter } from './chat/adapters/socket-io.adapters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,7 +18,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  app.useWebSocketAdapter(new SocketIoAdapter(app));
+  app.useWebSocketAdapter(new RedisIoAdapter(app));
 
   app.setGlobalPrefix('api', {
     exclude: ['/'],

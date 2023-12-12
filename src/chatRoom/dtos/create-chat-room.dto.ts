@@ -18,7 +18,23 @@ export class CreateChatRoomDto {
     required: true,
   })
   @Expose()
-  sellerId: number;
+  seller_id: number;
+
+  @ApiProperty({
+    example: 'test22',
+    description: '게시글 올린 사람 즉 양도자의 닉네임',
+    required: true,
+  })
+  @Expose()
+  seller_nickname: string;
+
+  @ApiProperty({
+    example: 'test23',
+    description: '양도받는 사람의 닉네임',
+    required: true,
+  })
+  @Expose()
+  buyer_nickname: string;
 
   @ApiProperty({
     example: 1,
@@ -26,5 +42,5 @@ export class CreateChatRoomDto {
     required: true,
   })
   @Expose()
-  estateId: number;
+  estate_id: number;
 }

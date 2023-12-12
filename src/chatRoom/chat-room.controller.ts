@@ -21,7 +21,11 @@ export class ChatRoomController {
   constructor(private readonly chatRoomService: ChatRoomService) {}
 
   @ApiOperation({ summary: '1대1 대화요청하여 채팅방 생성' })
-  @ApiBearerAuth()
+  @ApiHeader({
+    name: 'x-access-token',
+    description: 'JWT token',
+    required: true,
+  })
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: ChatRoom,
@@ -53,7 +57,11 @@ export class ChatRoomController {
   @ApiResponse({
     type: [ChatDto],
   })
-  @ApiBearerAuth()
+  @ApiHeader({
+    name: 'x-access-token',
+    description: 'JWT token',
+    required: true,
+  })
   @UseGuards(JwtAuthGuard)
   @Get('me/chatroom/:roomId')
   async getMyChatRoomDetails(@Param('roomId') roomId: string) {

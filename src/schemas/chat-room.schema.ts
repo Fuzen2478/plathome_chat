@@ -14,11 +14,13 @@ export class ChatRoom {
 
   @Prop({
     required: true,
+    index: true,
   })
   seller_id: number;
 
   @Prop({
     required: true,
+    index: true,
   })
   buyer_id: number;
 
@@ -34,6 +36,7 @@ export class ChatRoom {
 
   @Prop({
     required: true,
+    index: true,
   })
   estate_id: number;
 

@@ -15,11 +15,13 @@ export class Chat {
   @Prop({
     required: true,
     ref: 'ChatRoom',
+    index: true,
   })
   room_id: Types.ObjectId;
 
   @Prop({
     required: true,
+    index: true,
   })
   user_id: number;
 
@@ -38,11 +40,8 @@ export class Chat {
   })
   type: MessageType;
 
-  @Prop({ default: Date.now })
+  @Prop({ default: Date.now, index: true })
   created_at: Date;
-
-  @Prop({ default: Date.now })
-  updated_at: Date;
 }
 
 export const ChatSchema = SchemaFactory.createForClass(Chat);

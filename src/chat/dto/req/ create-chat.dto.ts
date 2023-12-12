@@ -32,7 +32,7 @@ export class CreateChatDto {
   room_id: string | Types.ObjectId;
 
   @ApiProperty({
-    description: 'user의 고유 id',
+    description: 'user의 닉네임',
     example: 4,
   })
   @IsString()

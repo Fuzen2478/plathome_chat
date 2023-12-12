@@ -9,5 +9,4 @@ export class ChatDto {
   type: MessageType;
   room_id: Types.ObjectId;
   created_at: Date;
-  updated_at: Date;
 }

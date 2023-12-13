@@ -112,11 +112,11 @@ export class ChatGateway
     this.chatQueue.add(
       'save-chat',
       {
-        userId,
+        user_id: userId,
         nickname,
-        roomId,
+        room_id: roomId,
         content: message,
-        createdAt: new Date(),
+        created_at: new Date(),
         type: MessageType.IMAGE,
       },
       {

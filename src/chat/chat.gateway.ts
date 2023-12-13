@@ -73,7 +73,6 @@ export class ChatGateway
     if (room.buyer_id !== userId && room.seller_id !== userId) {
       throw new WsException('방에 입장할 권한이 없습니다. ');
     }
-    console.log("enter : ", payload);
 
     client.join(roomId);
   }

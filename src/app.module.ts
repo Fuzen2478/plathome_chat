@@ -19,6 +19,7 @@ import { RedisModule } from './redis/redis-module';
     ChatClientModule,
     ChatRoomModule,
     UserModule,
+    QueueModule,
     ConfigModule.forRoot({
       isGlobal: true,
       expandVariables: true,

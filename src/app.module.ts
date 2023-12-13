@@ -10,6 +10,7 @@ import { ChatRoomModule } from './chatRoom/chat-room.module';
 import jwtConfig from './config/jwt.config';
 import { UserModule } from './user/user.module';
 import { UploadsModule } from './uploads/uploads.module';
+import { QueueModule } from './bull/queue.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { UploadsModule } from './uploads/uploads.module';
       inject: [ConfigService],
     }),
     UploadsModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],

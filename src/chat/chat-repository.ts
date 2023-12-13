@@ -10,7 +10,6 @@ export class ChatRepository {
 
   async createChat(dto: CreateChatDto): Promise<Chat> {
     dto.room_id = new Types.ObjectId(dto.room_id);
-
     return await this.chatModel.create(dto);
   }
 

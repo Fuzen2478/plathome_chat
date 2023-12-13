@@ -83,6 +83,7 @@ export class ChatGateway
     @MessageBody() payload: SendDataType,
   ): void {
     const { roomId, message, userId, nickname } = payload;
+    console.log("send : ", payload);
 
     this.chatQueue.add(
       'save-chat',

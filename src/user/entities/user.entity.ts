@@ -1,5 +1,5 @@
 export class UserEntity {
-  member_id: number;
+  id: number;
   nickname: string | null;
   provider: string;
   providerId: string;

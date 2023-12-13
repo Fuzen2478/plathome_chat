@@ -24,7 +24,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
     status: any,
   ) {
-    console.log(info);
+    // console.log(info);
     if (info && info.message === 'jwt expired') {
       throw new HttpException('토큰이 만료되었습니다.', 401);
     }

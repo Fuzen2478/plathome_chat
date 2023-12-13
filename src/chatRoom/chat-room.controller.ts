@@ -35,7 +35,7 @@ export class ChatRoomController {
     @CurrentUser() user: UserEntity,
     @Body() dto: CreateChatRoomDto,
   ): Promise<ChatRoomDto> {
-    return await this.chatRoomService.createChatRoom(dto, user.member_id);
+    return await this.chatRoomService.createChatRoom(dto, user.id);
   }
 
   @ApiOperation({ summary: '나의 채팅방 목록 조회' })
@@ -50,7 +50,7 @@ export class ChatRoomController {
   @UseGuards(JwtAuthGuard)
   @Get('me/chatrooms')
   async getMyChatRooms(@CurrentUser() user: UserEntity) {
-    return await this.chatRoomService.getMyChatRooms(user.member_id);
+    return await this.chatRoomService.getMyChatRooms(user.id);
   }
 
   @ApiOperation({ summary: '채팅방 페이지 상세 조회' })

@@ -11,6 +11,7 @@ import jwtConfig from './config/jwt.config';
 import { UserModule } from './user/user.module';
 import { UploadsModule } from './uploads/uploads.module';
 import { QueueModule } from './bull/queue.module';
+import { RedisModule } from './redis/redis-module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { QueueModule } from './bull/queue.module';
     }),
     UploadsModule,
     QueueModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],
